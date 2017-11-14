@@ -1,0 +1,148 @@
+body {
+	margin: 0 0 0 0;
+
+	height: 100%;
+
+	display: grid;
+	grid-template: repeat(12, 1fr) / repeat(12, 1fr);
+
+	.celda {
+
+		// Primera fila
+
+		&:nth-of-type(1) {
+			grid-column: span 4;
+			grid-row: span 2;
+		}
+		&:nth-of-type(2) {
+			grid-column: span 2;
+			grid-row: span 2;
+		}
+		&:nth-of-type(3) {
+			grid-column: span 2;
+			grid-row: span 2;
+		}
+		&:nth-of-type(4) {
+			grid-column: span 2;
+			grid-row: span 2;
+		}
+		&:nth-of-type(5) {
+			grid-column: span 2;
+			grid-row: span 2;
+		}
+
+		// Fila central, parte izquierda
+
+		&:nth-of-type(6) {
+			grid-column: span 8;
+			grid-row: span 4;
+		}
+
+		&:nth-of-type(8) {
+			grid-column: span 8;
+			grid-row: span 4;
+		}
+
+		// Fila central, parte derecha
+
+		&:nth-of-type(7) {
+			grid-column: span 4;
+			grid-row: span 8;
+		}
+
+		// Última fila
+
+		&:nth-of-type(9) {
+			grid-column: span 12;
+			grid-row: span 2;
+		}
+
+		// Animaciones - colores
+
+		@mixin glow($from, $to) {
+			$fromStr: str_slice(inspect($from), 2);
+			$toStr: str_slice(inspect($to), 2);
+			$name: _glow_#{$fromStr}_to_#{$toStr};
+
+			@keyframes #{$name} {
+				from {
+					background-color: $from;
+				}
+				to {
+					background-color: $to;
+				}
+			}
+
+			animation: #{$name} 2s alternate infinite;
+		}
+
+		@function randomColor() {
+			@return rgb(random(255), random(255), random(255));
+		}
+
+		@mixin randomGlow() {
+			@include glow(randomColor(), randomColor())
+		}
+
+		@for $i from 1 through 9 {
+			&:nth-of-type(#{$i}) {
+				@include randomGlow();
+			}
+		}
+
+		// Divs interiores
+
+		&:nth-of-type(6), &:nth-of-type(8) {
+
+			display: flex;
+
+			justify-content: space-around;
+			align-items: center;
+			flex-wrap: wrap;
+
+			.interior {
+				background-color: red;
+				height: 50px;
+				width: 50px;
+			}
+
+		}
+
+		// Animaciones
+
+		@keyframes appear {
+			from {
+				display: none;
+				margin-top: -200px;
+			}
+			to {
+				display: block;
+				margin-top: 0;
+			}
+		}
+		
+		@keyframes flip {
+			from {
+				height: 50px;
+				width: 50px;
+			}
+			25% {
+				height: 200px;
+				width: 200px;
+				transform: rotateY(90deg);
+				z-index: 1;
+			}
+			to {
+				height: 50px;
+				width: 50px;
+			}
+		}
+
+		.interior {
+			&:nth-of-type(3) {
+				animation: flip 2s infinite;
+			}
+		}
+
+	}
+}
